@@ -13,6 +13,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.experimental.ExtensionMethod;
@@ -44,7 +45,7 @@ import java.util.Map;
 @Mixin(Font.class)
 public class FontMixin implements IAcceleratedFont {
 
-	@Unique private final Object2IntMap	<ISeekableFormattedText>					widths			= new Object2IntOpenHashMap		<>	();
+	@Unique private final Object2IntMap	<ISeekableFormattedText>					widths			= Object2IntMaps.synchronize(new Object2IntOpenHashMap<>());
 	@Unique private final Map			<ISeekableFormattedText,	OutlineMesh>	outlineMeshes	= new Object2ObjectOpenHashMap	<>	();
 	@Unique private final Map			<IFormattedTextKey,			ComponentMesh>	normalMeshes	= new Object2ObjectOpenHashMap	<>	();
 	@Unique private final Map			<IFormattedTextKey,			ComponentMesh>	shadowMeshes	= new Object2ObjectOpenHashMap	<>	();
