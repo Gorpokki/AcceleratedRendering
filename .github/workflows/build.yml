@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: [self-hosted, linux-ci]
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - name: Checkout
@@ -20,19 +20,6 @@ jobs:
           java-version: 21
 
       - name: Build
-        id: build
         run: |
           chmod +x ./gradlew
           ./gradlew build
-          VERSION_IDENTIFIER=SNAPSHOT+${GITHUB_SHA::7}
-          FILE_NAME="$(ls ./build/libs -1 | head -n 1)"
-          NEW_NAME="${FILE_NAME%.jar}-${VERSION_IDENTIFIER}.jar"
-          mv "./build/libs/$FILE_NAME" "./build/libs/$NEW_NAME"
-          echo "artifact_name=$NEW_NAME" >> "$GITHUB_OUTPUT"
-          echo "artifact_path=./build/libs/$NEW_NAME" >> "$GITHUB_OUTPUT"
-
-      - name: GitHub Action Artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: ${{ steps.build.outputs.artifact_name }}
-          path: ${{ steps.build.outputs.artifact_path }}
